@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import { asset } from "@/lib/asset";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "motion/react";
@@ -55,7 +56,7 @@ export default function Nav() {
         >
           <Link href="/" aria-label="SD Innovations home" className="shrink-0">
             <Image
-              src="/brand/logo-header.png"
+              src={asset("/brand/logo-header.png")}
               alt="SD Innovations"
               width={932}
               height={149}

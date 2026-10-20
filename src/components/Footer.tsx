@@ -2,6 +2,7 @@
 
 import { useRef } from "react";
 import Image from "next/image";
+import { asset } from "@/lib/asset";
 import Link from "next/link";
 import { contact, nav } from "@/lib/content";
 
@@ -19,7 +20,7 @@ export default function Footer() {
       <div className="mx-auto w-full max-w-[1440px] px-5 md:px-10">
         <div className="grid gap-12 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
           <div className="flex flex-col gap-6">
-            <Image src="/brand/logo-header.png" alt="SD Innovations" width={932} height={149} className="theme-logo h-7 w-auto self-start" />
+            <Image src={asset("/brand/logo-header.png")} alt="SD Innovations" width={932} height={149} className="theme-logo h-7 w-auto self-start" />
             <a
               href={`mailto:${contact.email}`}
               className="w-fit text-[clamp(1.4rem,2.4vw,2rem)] font-medium tracking-[-0.02em] text-white underline decoration-white/25 underline-offset-[6px] transition-colors duration-200 hover:decoration-electric"
