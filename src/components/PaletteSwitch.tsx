@@ -1,27 +1,25 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
-import { DARK_ONLY, PALETTES, PALETTE_NAMES, getChosenPalette, setPalette, type PaletteName } from "@/lib/palette";
+import { PALETTES, PALETTE_NAMES, getChosenPalette, setPalette, type PaletteName } from "@/lib/palette";
 
-// The palette and theme live on <html data-palette / data-theme>; re-render when either changes.
+// The palette lives on <html data-palette>; re-render when it changes.
 function subscribe(cb: () => void) {
   const mo = new MutationObserver(cb);
-  mo.observe(document.documentElement, { attributes: true, attributeFilter: ["data-palette", "data-theme"] });
+  mo.observe(document.documentElement, { attributes: true, attributeFilter: ["data-palette"] });
   return () => mo.disconnect();
 }
-const getSnapshot = () => `${getChosenPalette()}|${document.documentElement.dataset.theme === "light" ? "light" : "dark"}`;
-const getServerSnapshot = () => "blue|dark";
+const getServerSnapshot = (): PaletteName => "blue";
 
-/** Swatches that switch the colour palette. Black & white is offered in dark mode only. */
+/** Swatches that switch the colour palette, in light and dark mode. */
 export default function PaletteSwitch({ className = "" }: { className?: string }) {
-  const [chosen, theme] = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot).split("|") as [PaletteName, string];
+  const chosen = useSyncExternalStore(subscribe, getChosenPalette, getServerSnapshot);
 
   return (
     <div role="radiogroup" aria-label="Colour palette" className={`flex items-center gap-1 ${className}`}>
-      {PALETTE_NAMES.filter((name) => theme !== "light" || !DARK_ONLY.includes(name)).map((name) => {
+      {PALETTE_NAMES.map((name) => {
         const p = PALETTES[name];
-        // in light mode a dark-only choice shows as blue
-        const on = chosen === name || (theme === "light" && name === "blue" && DARK_ONLY.includes(chosen));
+        const on = chosen === name;
         return (
           <button
             key={name}

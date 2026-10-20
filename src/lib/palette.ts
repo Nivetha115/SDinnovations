@@ -2,14 +2,11 @@
  * Colour palettes. The CSS side lives in globals.css (the --p-* tokens); this file
  * holds the same palettes for the WebGL backgrounds, plus the switch itself.
  * The choice lives on <html data-palette>, set before paint by the script in layout.tsx.
- * Blue, Orange and Emerald apply in both themes (light mode uses deeper accents; see globals.css);
- * Mono (black & white) is dark-mode only.
+ * Every palette works in both themes (light mode uses deeper accents; see globals.css).
  */
 
 export type PaletteName = "blue" | "orange" | "emerald" | "mono";
 export const PALETTE_NAMES: PaletteName[] = ["blue", "orange", "emerald", "mono"];
-/** Palettes offered in dark mode only; light mode shows blue instead. */
-export const DARK_ONLY: PaletteName[] = ["mono"];
 
 type RGB = [number, number, number];
 
@@ -96,11 +93,9 @@ export function getChosenPalette(): PaletteName {
   return isName(v) ? v : "blue";
 }
 
-/** The palette on screen (a dark-only palette shows as blue in light mode). */
+/** The palette on screen. */
 export function getActivePalette(): Palette {
-  const name = getChosenPalette();
-  if (DARK_ONLY.includes(name) && document.documentElement.dataset.theme === "light") return PALETTES.blue;
-  return PALETTES[name];
+  return PALETTES[getChosenPalette()];
 }
 
 export function setPalette(next: PaletteName) {

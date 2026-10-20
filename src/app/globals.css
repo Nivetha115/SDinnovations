@@ -2,7 +2,7 @@
 
 /*
  * Colour palettes. Each palette sets the --p-* values; everything else reads them.
- * Blue is the default; Orange and Emerald work in both modes. Light mode uses deeper accents so
+ * Blue is the default; Orange, Emerald and Mono (black & white) work in both modes. Light mode uses deeper accents so
  * accent text and white-on-accent buttons keep ≥ 4.5:1 contrast (WCAG AA).
  * The palette lives on <html data-palette>, set before paint by the script in layout.tsx.
  * The WebGL backgrounds read the same choice from src/lib/palette.ts.
@@ -42,8 +42,8 @@ html[data-palette="orange"] {
   --p-banner-corner: rgba(0, 0, 0, 0.9);
 }
 
-/* Mono: black and white only, dark mode only (light mode shows blue) */
-html[data-palette="mono"]:not([data-theme="light"]) {
+/* Mono: black and white only */
+html[data-palette="mono"] {
   --p-ink: #000000;
   --p-navy: #1f1f1f;
   --p-royal: #8a8a8a;
@@ -131,6 +131,21 @@ html[data-theme="light"][data-palette="orange"] {
   --banner-glow: rgba(241, 96, 1, 0.3);
   --p-electric: #b83b00;
   --p-accent-strong: #b83b00;
+  --p-on-accent: #ffffff;
+}
+
+/* Light mode, Mono: black on white; the accent is near-black (18:1), with white text on it */
+html[data-theme="light"][data-palette="mono"] {
+  --color-white: #000000;
+  --body: #4d4d4d;
+  --card: #f2f2f2;
+  --card-hover: #e6e6e6;
+  --row-hover: rgba(0, 0, 0, 0.05);
+  --banner: #f2f2f2;
+  --banner-glow: rgba(0, 0, 0, 0.12);
+  --p-royal: #333333;
+  --p-electric: #111111;
+  --p-accent-strong: #111111;
   --p-on-accent: #ffffff;
 }
 
