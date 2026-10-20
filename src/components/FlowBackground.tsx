@@ -350,7 +350,6 @@ export default function FlowBackground() {
       ]) U[name] = gl.getUniformLocation(prog, name);
       gl.uniform1f(U.uCalmStrength, CALM_STRENGTH);
       gl.uniform1f(U.uGrain, GRAIN);
-      gl.uniform1f(U.uLumCap, LUM_CAP);
       gl.uniform2f(U.uSwirlC, 0.35, 0.0);
       gl.uniform1f(U.uDimStrength, DIM_STRENGTH);
       gl.uniform1f(U.uR0, ARC_R0);
@@ -384,7 +383,7 @@ export default function FlowBackground() {
     ro.observe(canvas);
 
     // ── Scroll-driven state
-    const cur = { s: 0, phase: 0, opacity: 0, boost: 0, light: 0, fan: 0, arcs: 0, step: 0, pulse: 0 };
+    const cur = { s: 0, phase: 0, opacity: 0, boost: 0, light: 0, fan: 0, arcs: 0, step: 0, pulse: 0, gain: getActivePalette().flowGain ?? 1, cap: getActivePalette().flowCap ?? LUM_CAP };
     let time = 0;
     let lastY = window.scrollY;
     let last = performance.now();
@@ -463,6 +462,9 @@ export default function FlowBackground() {
       cur.pulse = Math.max(0, cur.pulse - dt / 0.6);
       const flow = getActivePalette().flow;
       for (const [key, v] of Object.entries(flow)) easeRGB(colours[key], v, Math.min(1, dt * 6));
+      const pal = getActivePalette();
+      cur.gain += ((pal.flowGain ?? 1) - cur.gain) * Math.min(1, dt * 6);
+      cur.cap += ((pal.flowCap ?? LUM_CAP) - cur.cap) * Math.min(1, dt * 6);
       const lightTarget = document.documentElement.dataset.theme === "light" ? 1 : 0;
       cur.light += (lightTarget - cur.light) * Math.min(1, dt * 6);
 
@@ -491,7 +493,8 @@ export default function FlowBackground() {
         gl.uniform1f(U.uSwirl, st.swirl);
         gl.uniform1f(U.uCross, st.cross);
         gl.uniform1f(U.uLen, st.len);
-        gl.uniform1f(U.uBright, st.bright * BRIGHTNESS);
+        gl.uniform1f(U.uBright, st.bright * BRIGHTNESS * cur.gain);
+        gl.uniform1f(U.uLumCap, cur.cap);
         gl.uniform1f(U.uTwist, st.twist);
         gl.uniform1f(U.uDark, st.dark);
         gl.uniform2f(U.uCenter, st.cx, st.cy);

@@ -18,6 +18,13 @@ export type Palette = {
   sky: { a: RGB; b: RGB; beam: RGB };
   /** Background ribbons (FlowBackground): `base` matches the page colour exactly. */
   flow: { base: RGB; lift: RGB; b1: RGB; b2: RGB; b3: RGB; h1: RGB; h2: RGB };
+  /**
+   * Background brightness for this palette: `gain` multiplies the strands, `cap` is the peak
+   * luminance before the layer's opacity (see FlowBackground). Grey light reads much fainter than
+   * coloured light, so black & white gets more of both. Defaults: gain 1, cap LUM_CAP.
+   */
+  flowGain?: number;
+  flowCap?: number;
 };
 
 const rgb = (hex: string): RGB => [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16) / 255) as RGB;
@@ -74,13 +81,16 @@ export const PALETTES: Record<PaletteName, Palette> = {
     sky: { a: rgb("#3a3a3a"), b: rgb("#9a9a9a"), beam: rgb("#ffffff") },
     flow: {
       base: rgb("#000000"),
-      lift: rgb("#0d0d0d"),
-      b1: rgb("#3a3a3a"),
-      b2: rgb("#6e6e6e"),
-      b3: rgb("#a8a8a8"),
-      h1: rgb("#d9d9d9"),
+      lift: rgb("#111111"),
+      b1: rgb("#5a5a5a"),
+      b2: rgb("#9a9a9a"),
+      b3: rgb("#d4d4d4"),
+      h1: rgb("#f0f0f0"),
       h2: rgb("#ffffff"),
     },
+    // after the layer's 50% opacity this peaks around 8% luminance — still dark enough behind text
+    flowGain: 2.2,
+    flowCap: 0.34,
   },
 };
 
