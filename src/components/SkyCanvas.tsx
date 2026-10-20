@@ -4,6 +4,7 @@ import { useMemo, useRef } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
 import { useOnScreen } from "@/lib/useOnScreen";
+import { easeRGB, getActivePalette } from "@/lib/palette";
 
 const vertex = /* glsl */ `
   varying vec2 vUv;
@@ -20,10 +21,10 @@ const fragment = /* glsl */ `
   precision highp float;
   varying vec2 vUv;
   uniform float uTime;
+  uniform vec3 uA, uB, uBeam;  // palette: field from uA to uB, beam tint
+  uniform float uFlow;  // clock for the colour drift, runs faster than uTime
   uniform vec2 uRes;
 
-  vec3 royal = vec3(0.047, 0.388, 0.992);
-  vec3 cyan  = vec3(0.012, 0.847, 0.992);
 
   vec2 hash(vec2 p) {
     p = vec2(dot(p, vec2(127.1, 311.7)), dot(p, vec2(269.5, 183.3)));
@@ -45,11 +46,11 @@ const fragment = /* glsl */ `
     vec2 uv = vUv;                 // y = 1 at the top
     float aspect = uRes.x / uRes.y;
     vec2 p = vec2(uv.x * aspect, uv.y);
-    float t = uTime * 0.05;
+    float t = uFlow * 0.05;
 
     // hue: royal on the left drifting to cyan on the right, with slow liquid variation
     float field = uv.x * 0.7 + fbm(p * 1.3 + vec2(t, -t * 0.6)) * 0.7 + 0.06 * sin(t * 2.0 + uv.y * 3.0) - 0.08;
-    vec3 col = mix(royal, cyan, clamp(field, 0.0, 1.0));
+    vec3 col = mix(uA, uB, clamp(field, 0.0, 1.0));
 
     // the reference darkens almost linearly from top (bright) to bottom (near black)
     float fromTop = 1.0 - uv.y;
@@ -62,11 +63,15 @@ const fragment = /* glsl */ `
     float d = abs(dot(b, vec2(-sin(ang), cos(ang))));
     float along = dot(b, vec2(cos(ang), sin(ang)));
     float beam = exp(-d * d * 260.0) * smoothstep(0.55, 0.0, abs(along)) * (0.55 + 0.15 * sin(uTime * 0.4));
-    col += vec3(0.65, 0.8, 0.95) * beam * shade;
+    col += uBeam * beam * shade;
 
     gl_FragColor = vec4(col, 1.0);
   }
 `;
+
+// Playback speed (1 = the original pace): FLOW drives the colour drift, BEAM the light beam's breathing.
+const FLOW = 12;
+const BEAM = 2;
 
 function Sky({ reduced }: { reduced: boolean }) {
   const mat = useRef<THREE.ShaderMaterial>(null);
@@ -74,7 +79,11 @@ function Sky({ reduced }: { reduced: boolean }) {
   const uniforms = useMemo(
     () => ({
       uTime: { value: 6 },
+      uFlow: { value: 6 },
       uRes: { value: new THREE.Vector2(1, 1) },
+      uA: { value: [...getActivePalette().sky.a] },
+      uB: { value: [...getActivePalette().sky.b] },
+      uBeam: { value: [...getActivePalette().sky.beam] },
     }),
     []
   );
@@ -83,7 +92,16 @@ function Sky({ reduced }: { reduced: boolean }) {
     if (!m) return;
     const dpr = gl.getPixelRatio();
     m.uniforms.uRes.value.set(size.width * dpr, size.height * dpr);
-    if (!reduced) m.uniforms.uTime.value += delta;
+    // follow the palette, cross-fading over ~0.4s
+    const sky = getActivePalette().sky;
+    const k = Math.min(1, delta * 6);
+    easeRGB(m.uniforms.uA.value, sky.a, k);
+    easeRGB(m.uniforms.uB.value, sky.b, k);
+    easeRGB(m.uniforms.uBeam.value, sky.beam, k);
+    if (!reduced) {
+      m.uniforms.uTime.value += delta * BEAM;
+      m.uniforms.uFlow.value += delta * FLOW;
+    }
   });
   return (
     <mesh frustumCulled={false}>

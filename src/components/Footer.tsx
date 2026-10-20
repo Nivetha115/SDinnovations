@@ -30,7 +30,7 @@ export default function Footer() {
           <FooterCol title="Pages" links={nav} />
           <FooterCol title="Company" links={legal} />
           <div>
-            <p className="mb-4 text-[14px] text-white/45">Visit</p>
+            <p className="mb-4 text-[14px] text-white/60">Visit</p>
             <address className="text-[15px] not-italic leading-relaxed text-white/70">
               {contact.address.map((l) => (
                 <span key={l} className="block">
@@ -49,7 +49,7 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="mt-16 flex flex-col gap-2 border-t border-white/10 pt-6 text-[13px] text-white/45 sm:flex-row sm:justify-between">
+        <div className="mt-16 flex flex-col gap-2 border-t border-white/10 pt-6 text-[13px] text-white/60 sm:flex-row sm:justify-between">
           <span>© 2026 SD Innovations. All rights reserved.</span>
           <span>Humanising technology</span>
         </div>
@@ -61,7 +61,7 @@ export default function Footer() {
 function FooterCol({ title, links }: { title: string; links: { label: string; href: string }[] }) {
   return (
     <div>
-      <p className="mb-4 text-[14px] text-white/45">{title}</p>
+      <p className="mb-4 text-[14px] text-white/60">{title}</p>
       <ul className="space-y-2.5">
         {links.map((l) => (
           <li key={l.href}>

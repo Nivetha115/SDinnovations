@@ -1,23 +1,103 @@
 @import "tailwindcss";
 
+/*
+ * Colour palettes. Each palette sets the --p-* values; everything else reads them.
+ * Blue is the default; Orange and Emerald work in both modes. Light mode uses deeper accents so
+ * accent text and white-on-accent buttons keep ≥ 4.5:1 contrast (WCAG AA).
+ * The palette lives on <html data-palette>, set before paint by the script in layout.tsx.
+ * The WebGL backgrounds read the same choice from src/lib/palette.ts.
+ */
 :root {
-  --ink: #04060d;
-  --navy: #0e285d;
-  --royal: #0d409b;
-  --electric: #0099ff;
-  --paper: #f4f6fb;
+  --p-ink: #04060d;          /* the dark ground */
+  --p-navy: #0e285d;         /* deep accent surfaces */
+  --p-royal: #0d409b;        /* mid accent */
+  --p-electric: #0099ff;     /* the accent */
+  --p-on-accent: #ffffff;    /* text on the accent */
+  --p-accent-strong: #0a6fe0; /* accent text on white */
+  --p-paper: #f4f6fb;        /* light bands */
+  --p-body: #b9c6e4;         /* body copy on dark */
+  --p-card: #0a1226;
+  --p-card-hover: #0e285d;
+  --p-row-hover: rgba(13, 64, 155, 0.45);
+  --p-banner: #0e285d;
+  --p-banner-glow: rgba(0, 153, 255, 0.55);
+  --p-banner-corner: rgba(4, 6, 13, 0.9);
+}
+
+/* Orange: branding orange #E85002 on black, greys, and the #C10801 → #F16001 gradient */
+html[data-palette="orange"] {
+  --p-ink: #000000;
+  --p-navy: #333333;
+  --p-royal: #c10801;
+  --p-electric: #e85002;
+  --p-on-accent: #000000; /* black on #E85002 is 5.6:1; white would be 3.8:1 */
+  --p-accent-strong: #c43f00;
+  --p-paper: #f9f9f9;
+  --p-body: #a7a7a7;
+  --p-card: #141414;
+  --p-card-hover: #333333;
+  --p-row-hover: rgba(232, 80, 2, 0.18);
+  --p-banner: #2a0b03;
+  --p-banner-glow: rgba(241, 96, 1, 0.5);
+  --p-banner-corner: rgba(0, 0, 0, 0.9);
+}
+
+/* Mono: black and white only, dark mode only (light mode shows blue) */
+html[data-palette="mono"]:not([data-theme="light"]) {
+  --p-ink: #000000;
+  --p-navy: #1f1f1f;
+  --p-royal: #8a8a8a;
+  --p-electric: #d4d4d4;
+  --p-on-accent: #000000;
+  --p-accent-strong: #111111;
+  --p-paper: #f5f5f5;
+  --p-body: #b3b3b3;
+  --p-card: #111111;
+  --p-card-hover: #222222;
+  --p-row-hover: rgba(255, 255, 255, 0.08);
+  --p-banner: #161616;
+  --p-banner-glow: rgba(255, 255, 255, 0.18);
+  --p-banner-corner: rgba(0, 0, 0, 0.9);
+}
+
+/* Emerald: Emerald #06D6A0, Brunswick Green #0C4137, Polar #E6FBF6 */
+html[data-palette="emerald"] {
+  --p-ink: #03110e;
+  --p-navy: #0c4137;
+  --p-royal: #0a8f6c;
+  --p-electric: #06d6a0;
+  --p-on-accent: #03110e;
+  --p-accent-strong: #07926d;
+  --p-paper: #e6fbf6;
+  --p-body: #b5d6cc;
+  --p-card: #072019;
+  --p-card-hover: #0c4137;
+  --p-row-hover: rgba(12, 65, 55, 0.6);
+  --p-banner: #0c4137;
+  --p-banner-glow: rgba(6, 214, 160, 0.45);
+  --p-banner-corner: rgba(3, 17, 14, 0.9);
+}
+
+:root {
+  --ink: var(--p-ink);
+  --navy: var(--p-navy);
+  --royal: var(--p-royal);
+  --electric: var(--p-electric);
+  --on-accent: var(--p-on-accent);
+  --accent-strong: var(--p-accent-strong);
+  --paper: var(--p-paper);
   --header-h: 88px;
 
   /* theme tokens (dark is the default) */
-  --page: #04060d; /* the page colour itself — never overridden by .theme-fixed */
-  --body: #b9c6e4; /* body copy */
-  --card: #0a1226;
-  --card-hover: #0e285d;
+  --page: var(--p-ink); /* the page colour itself — never overridden by .theme-fixed */
+  --body: var(--p-body); /* body copy */
+  --card: var(--p-card);
+  --card-hover: var(--p-card-hover);
   --danger: #ff8a8a;
-  --row-hover: rgba(13, 64, 155, 0.45);
-  --banner: #0e285d;
-  --banner-glow: rgba(0, 153, 255, 0.55);
-  --banner-corner: rgba(4, 6, 13, 0.9);
+  --row-hover: var(--p-row-hover);
+  --banner: var(--p-banner);
+  --banner-glow: var(--p-banner-glow);
+  --banner-corner: var(--p-banner-corner);
 }
 
 /* Light mode: the page inverts — "ink" becomes the light ground and "white" becomes the dark text. */
@@ -34,15 +114,48 @@
   --banner-glow: rgba(0, 153, 255, 0.35);
   --banner-corner: rgba(255, 255, 255, 0.85);
   color-scheme: light;
+  /* accent deep enough for text on white (5.5:1) and white text on it */
+  --p-electric: #0a66d1;
+  --p-accent-strong: #0a66d1;
+  --p-on-accent: #ffffff;
+}
+
+/* Light mode, Orange: greys from the brand palette, accent deepened to #B83B00 (5.7:1 on white) */
+html[data-theme="light"][data-palette="orange"] {
+  --color-white: #141414;
+  --body: #555555;
+  --card: #f3f3f3;
+  --card-hover: #ececec;
+  --row-hover: rgba(232, 80, 2, 0.08);
+  --banner: #fdeee6;
+  --banner-glow: rgba(241, 96, 1, 0.3);
+  --p-electric: #b83b00;
+  --p-accent-strong: #b83b00;
+  --p-on-accent: #ffffff;
+}
+
+/* Light mode, Emerald: Polar grounds, accent deepened to #067A5B (5.3:1 on white) */
+html[data-theme="light"][data-palette="emerald"] {
+  --color-white: #021a14;
+  --body: #3d5a52;
+  --card: #e9f7f2;
+  --card-hover: #d6f1e8;
+  --row-hover: rgba(6, 214, 160, 0.1);
+  --banner: #e6fbf6;
+  --banner-glow: rgba(6, 214, 160, 0.3);
+  --p-royal: #067a5b;
+  --p-electric: #067a5b;
+  --p-accent-strong: #067a5b;
+  --p-on-accent: #ffffff;
 }
 
 /* Areas that keep their designed look in both modes (hero skies, CTA banner, nav bar, light bands). */
 .theme-fixed {
-  --ink: #04060d;
+  --ink: var(--p-ink);
   --color-white: #fff;
-  --body: #b9c6e4;
-  --card: #0a1226;
-  --card-hover: #0e285d;
+  --body: var(--p-body);
+  --card: var(--p-card);
+  --card-hover: var(--p-card-hover);
   --danger: #ff8a8a;
 }
 
@@ -73,6 +186,8 @@ html.theme-switching * {
   --color-royal: var(--royal);
   --color-electric: var(--electric);
   --color-paper: var(--paper);
+  --color-on-accent: var(--on-accent);
+  --color-accent-strong: var(--accent-strong);
   --font-sans: var(--font-instrument);
   --font-mono: var(--font-mono);
 }
@@ -95,7 +210,7 @@ body {
 
 ::selection {
   background: var(--electric);
-  color: #fff;
+  color: var(--on-accent);
 }
 
 /* Lenis */
@@ -120,6 +235,10 @@ html.lenis body {
   mix-blend-mode: overlay;
   background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
 }
+/* the CTA banner fades in at the top; its grain does too */
+#cta.grain::after {
+  mask-image: linear-gradient(to bottom, transparent, #000 14rem);
+}
 
 /* Wipe button (Cypher style) */
 .wipe {
@@ -127,17 +246,18 @@ html.lenis body {
   overflow: hidden;
   isolation: isolate;
 }
+/* Hover fill: a circle blows up from where the pointer entered (centre for keyboard focus). */
 .wipe .sweep {
   position: absolute;
   inset: 0;
   z-index: -1;
-  transform: translateY(101%);
   border-radius: inherit;
-  transition: transform 0.55s cubic-bezier(0.7, 0, 0.2, 1);
+  clip-path: circle(0px at var(--wx, 50%) var(--wy, 50%));
+  transition: clip-path 0.6s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .wipe:hover .sweep,
 .wipe:focus-visible .sweep {
-  transform: translateY(0);
+  clip-path: circle(150% at var(--wx, 50%) var(--wy, 50%));
 }
 
 :root {
@@ -162,6 +282,9 @@ html.lenis body {
 .split-line {
   padding-bottom: 0.08em;
   margin-bottom: -0.08em;
+}
+.split-word {
+  will-change: transform, filter;
 }
 
 :focus-visible {

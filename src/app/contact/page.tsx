@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import PageHero from "@/components/PageHero";
 import ContactForm from "@/components/ContactForm";
 import Reveal from "@/components/motion/Reveal";
+import SplitHeading from "@/components/motion/SplitHeading";
 import { wrap } from "@/lib/ui";
 import { contact } from "@/lib/content";
 
@@ -21,13 +22,13 @@ export default function ContactPage() {
       <section className="bg-ink py-20 md:py-32">
         <div className={`${wrap} grid gap-16 lg:grid-cols-[1.5fr_1fr] lg:gap-24`}>
           <Reveal>
-            <h2 className="mb-10 text-[clamp(1.75rem,3vw,2.5rem)] font-medium tracking-[-0.025em]">Tell us about your project</h2>
+            <SplitHeading className="mb-10 text-[clamp(1.75rem,3vw,2.5rem)] font-medium tracking-[-0.025em]">Tell us about your project</SplitHeading>
             <ContactForm />
           </Reveal>
 
           <Reveal as="aside" stagger={0.09} delay={0.15} className="space-y-12 lg:pt-3">
             <div>
-              <h2 className="text-[14px] text-white/55">Inquiries</h2>
+              <h2 className="text-[14px] text-white/60">Inquiries</h2>
               <a
                 href={`mailto:${contact.email}`}
                 className="mt-3 inline-block text-[clamp(1.4rem,2.2vw,1.9rem)] font-medium tracking-[-0.02em] underline decoration-white/25 underline-offset-[6px] transition-colors duration-200 hover:decoration-electric"
@@ -36,7 +37,7 @@ export default function ContactPage() {
               </a>
             </div>
             <div>
-              <h2 className="text-[14px] text-white/55">Location</h2>
+              <h2 className="text-[14px] text-white/60">Location</h2>
               <address className="mt-3 text-[17px] not-italic leading-relaxed text-white/85">
                 {contact.address.map((l) => (
                   <span key={l} className="block">
@@ -54,7 +55,7 @@ export default function ContactPage() {
               </a>
             </div>
             <div>
-              <h2 className="text-[14px] text-white/55">Hours</h2>
+              <h2 className="text-[14px] text-white/60">Hours</h2>
               <p className="mt-3 text-[17px] text-white/85">{contact.hours}</p>
             </div>
           </Reveal>

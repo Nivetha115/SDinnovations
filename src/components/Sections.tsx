@@ -39,7 +39,7 @@ export function Services() {
                   aria-hidden
                   className="absolute inset-0 origin-bottom scale-y-0 bg-gradient-to-r from-navy via-royal/70 to-transparent transition-transform duration-700 ease-[var(--ease-in-out)] group-hover:scale-y-100"
                 />
-                <span className="relative text-[13px] tabular-nums text-white/40 transition-colors duration-200 group-hover:text-electric">
+                <span className="relative text-[13px] tabular-nums text-white/60 transition-colors duration-200 group-hover:text-electric">
                   {String(i + 1).padStart(2, "0")}
                 </span>
                 <span className="relative text-[clamp(1.25rem,2.4vw,2.1rem)] font-medium tracking-[-0.02em] transition-transform duration-500 ease-[var(--ease-out)] group-hover:translate-x-2">
@@ -48,7 +48,7 @@ export function Services() {
                 <span className="relative hidden max-w-[44ch] text-[15px] leading-relaxed text-white/60 md:block">
                   {s.short}
                 </span>
-                <span className="relative grid h-10 w-10 place-items-center rounded-full border border-white/20 transition-[transform,background-color,border-color] duration-300 ease-[var(--ease-out)] group-hover:rotate-45 group-hover:border-electric group-hover:bg-electric group-hover:text-[#fff]">
+                <span className="relative grid h-10 w-10 place-items-center rounded-full border border-white/20 transition-[transform,background-color,border-color] duration-300 ease-[var(--ease-out)] group-hover:rotate-45 group-hover:border-electric group-hover:bg-electric group-hover:text-on-accent">
                   <Arrow />
                 </span>
               </Link>
@@ -78,11 +78,11 @@ export function WhyUs() {
               key={it.title}
               className="group relative flex h-full min-h-[300px] flex-col bg-paper p-7 transition-colors duration-500 ease-[var(--ease-out)] hover:bg-navy hover:text-white md:p-8"
             >
-              <span className="grid h-14 w-14 place-items-center rounded-xl bg-ink/[0.05] text-royal transition-[background-color,color,transform] duration-500 ease-[var(--ease-out)] group-hover:-translate-y-1 group-hover:rotate-[-6deg] group-hover:bg-electric group-hover:text-white">
+              <span className="grid h-14 w-14 place-items-center rounded-xl bg-ink/[0.05] text-royal transition-[background-color,color] duration-500 ease-[var(--ease-out)] group-hover:bg-electric group-hover:text-on-accent">
                 <WhyIcon name={it.icon} className="h-7 w-7" />
               </span>
               <div className="mt-auto">
-                <h3 className="text-[24px] font-medium tracking-[-0.02em]">{it.title}</h3>
+                <SplitHeading as="h3" className="text-[24px] font-medium tracking-[-0.02em]">{it.title}</SplitHeading>
                 <p className="mt-3 text-[15px] leading-relaxed text-ink/65 transition-colors duration-300 group-hover:text-white/75">
                   {it.body}
                 </p>
@@ -112,14 +112,14 @@ export function CaseRows({ limit }: { limit?: number }) {
             />
             <div className="relative">
               <p className="text-[14px] text-electric">{c.tag}</p>
-              <h3 className="mt-2 text-[clamp(1.6rem,3vw,2.6rem)] font-medium leading-[1.05] tracking-[-0.025em] transition-transform duration-500 ease-[var(--ease-out)] group-hover:translate-x-2">
+              <SplitHeading as="h3" className="mt-2 text-[clamp(1.6rem,3vw,2.6rem)] font-medium leading-[1.05] tracking-[-0.025em] transition-transform duration-500 ease-[var(--ease-out)] group-hover:translate-x-2">
                 {c.title}
-              </h3>
+              </SplitHeading>
             </div>
             <p className={`relative max-w-[52ch] ${bodyText}`}>{c.summary}</p>
             <span className="relative flex items-center gap-4 md:justify-end">
               <span className="text-[15px] font-medium text-white/85 md:hidden">Read case study</span>
-              <span className="grid h-11 w-11 place-items-center rounded-full border border-white/20 transition-[transform,background-color,border-color] duration-300 ease-[var(--ease-out)] group-hover:rotate-45 group-hover:border-electric group-hover:bg-electric group-hover:text-[#fff]">
+              <span className="grid h-11 w-11 place-items-center rounded-full border border-white/20 transition-[transform,background-color,border-color] duration-300 ease-[var(--ease-out)] group-hover:rotate-45 group-hover:border-electric group-hover:bg-electric group-hover:text-on-accent">
                 <Arrow />
               </span>
             </span>
@@ -132,7 +132,7 @@ export function CaseRows({ limit }: { limit?: number }) {
 
 export function Work() {
   return (
-    <section id="work" data-chapter="Work" className="relative py-24 md:py-36">
+    <section id="work" data-flow-state="3" data-chapter="Work" className="relative py-24 md:py-36">
       <div className={`${wrap} relative z-[2]`}>
         <SectionLabel>Selected work</SectionLabel>
         <div className="mt-10 flex flex-col gap-8 md:mt-14 md:flex-row md:items-end md:justify-between">

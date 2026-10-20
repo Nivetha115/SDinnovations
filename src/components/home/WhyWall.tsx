@@ -65,13 +65,13 @@ export default function WhyWall() {
   );
 
   return (
-    <section ref={root} id="why" data-chapter="Why us" className="relative overflow-hidden">
+    <section ref={root} id="why" data-flow-state="2" data-chapter="Why us" className="relative overflow-hidden">
       {/* Desktop: held stage — the big word is the heading; its description sits right below it */}
       <div className="relative z-[2] hidden h-svh lg:motion-safe:block">
         <div className={`${wrap} relative flex h-full flex-col pb-12 pt-[calc(var(--header-h)+3.5rem)]`}>
           <div className="flex items-start justify-between gap-10">
             <Pill>{why.label}</Pill>
-            <p className={`max-w-[30ch] text-right ${bodyText}`}>{why.title}</p>
+            <p data-flow-dim className={`max-w-[30ch] text-right ${bodyText}`}>{why.title}</p>
           </div>
 
           <div className="flex flex-1 items-end justify-between gap-12 pb-4">
@@ -96,10 +96,10 @@ export default function WhyWall() {
               </div>
             </div>
 
-            <div className="w-48 shrink-0 text-right">
+            <div data-flow-dim className="w-48 shrink-0 text-right">
               <p className="text-[clamp(2.5rem,3.6vw,3.25rem)] font-medium leading-none tracking-[-0.04em] tabular-nums">
                 <span data-count>01</span>
-                <span className="text-white/30">/{String(n).padStart(2, "0")}</span>
+                <span className="text-white/60">/{String(n).padStart(2, "0")}</span>
               </p>
               <div className="mt-4 h-[2px] w-full overflow-hidden rounded-full bg-white/10">
                 <div data-meter className="h-full origin-left bg-electric" />
@@ -121,7 +121,7 @@ export default function WhyWall() {
               <p className="text-[14px] tabular-nums text-electric">
                 {String(i + 1).padStart(2, "0")} / {String(n).padStart(2, "0")}
               </p>
-              <h3 className="mt-2 text-[28px] font-medium tracking-[-0.025em]">{it.title}</h3>
+              <SplitHeading as="h3" className="mt-2 text-[28px] font-medium tracking-[-0.025em]">{it.title}</SplitHeading>
               <p className={`mt-2 ${bodyText}`}>{it.body}</p>
             </li>
           ))}

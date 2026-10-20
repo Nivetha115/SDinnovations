@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Instrument_Sans, JetBrains_Mono } from "next/font/google";
 import SmoothScroll from "@/components/SmoothScroll";
+import WipeOrigin from "@/components/WipeOrigin";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import "./globals.css";
@@ -36,12 +37,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <script
           dangerouslySetInnerHTML={{
             __html:
-              "(function(){var d=document.documentElement;d.classList.add('js');try{var t=localStorage.getItem('theme');if(t!=='light'&&t!=='dark'){t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'}d.dataset.theme=t}catch(e){d.dataset.theme='dark'}})()",
+              "(function(){var d=document.documentElement;d.classList.add('js');try{var t=localStorage.getItem('theme');if(t!=='light'&&t!=='dark'){t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'}d.dataset.theme=t}catch(e){d.dataset.theme='dark'}try{var p=localStorage.getItem('palette');d.dataset.palette=(p==='orange'||p==='emerald'||p==='mono')?p:'blue'}catch(e){d.dataset.palette='blue'}})()",
           }}
         />
       </head>
       <body className="min-h-screen">
         <SmoothScroll />
+        <WipeOrigin />
         <Nav />
         {children}
         <Footer />

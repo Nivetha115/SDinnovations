@@ -4,7 +4,7 @@ import { Work } from "@/components/Sections";
 import AboutTurn from "@/components/home/AboutTurn";
 import Capabilities from "@/components/home/Capabilities";
 import WhyWall from "@/components/home/WhyWall";
-import Traveler from "@/components/home/Traveler";
+import FlowBackground from "@/components/FlowBackground";
 
 // Scroll story inspired by philos.site: one particle sculpture travels through
 // hero drift → the turn → the ascent → the wall.
@@ -17,7 +17,7 @@ export default function Home() {
       <WhyWall />
       <Work />
       <CTA />
-      <Traveler />
+      <FlowBackground />
     </main>
   );
 }

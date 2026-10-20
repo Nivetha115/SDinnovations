@@ -30,7 +30,7 @@ export function ServiceList() {
         // Each service lights its marker as it reaches the reading line.
         gsap.utils.toArray<HTMLElement>("[data-service]").forEach((el) => {
           gsap.to(el.querySelector("[data-dot]"), {
-            backgroundColor: "#0099ff",
+            backgroundColor: () => getComputedStyle(document.documentElement).getPropertyValue("--electric").trim() || "#0099ff",
             scale: 1.6,
             duration: 0.3,
             ease: "power2.out",
@@ -74,9 +74,9 @@ export function ServiceList() {
                     aria-hidden
                     className="absolute -left-14 top-[0.55em] hidden h-[15px] w-[15px] rounded-full border-[3px] border-ink bg-white/30 text-[clamp(1.75rem,3.4vw,3rem)] md:block"
                   />
-                  <h3 className="text-[clamp(1.75rem,3.4vw,3rem)] font-medium leading-[1.05] tracking-[-0.025em]">
+                  <SplitHeading as="h3" className="text-[clamp(1.75rem,3.4vw,3rem)] font-medium leading-[1.05] tracking-[-0.025em]">
                     {s.title}
-                  </h3>
+                  </SplitHeading>
                 </div>
                 <div>
                   <p className="text-[clamp(1.1rem,1.6vw,1.375rem)] leading-snug text-white">{s.tagline}</p>

@@ -1,12 +1,13 @@
 import Link from "next/link";
+import SplitHeading from "@/components/motion/SplitHeading";
 
 export default function NotFound() {
   return (
     <main className="flex min-h-[80svh] flex-col justify-end bg-ink px-5 pb-20 pt-40 md:px-10">
       <div className="mx-auto w-full max-w-[1440px]">
-        <h1 className="text-[clamp(2.5rem,6vw,5.5rem)] font-medium leading-[1] tracking-[-0.035em]">
-          This page doesn&apos;t exist.
-        </h1>
+        <SplitHeading as="h1" load className="text-[clamp(2.5rem,6vw,5.5rem)] font-medium leading-[1] tracking-[-0.035em]">
+          {"This page doesn't exist."}
+        </SplitHeading>
         <p className="mt-6 max-w-[48ch] text-[17px] leading-relaxed text-white/70">
           The link may be old or mistyped. Head back home, or see what we do.
         </p>

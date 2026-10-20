@@ -6,7 +6,11 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "motion/react";
 import { nav } from "@/lib/content";
+
+// The "Let's talk" button already goes to /contact, so the header skips the Contact link.
+const links = nav.filter((l) => l.href !== "/contact");
 import ThemeToggle from "./ThemeToggle";
+import PaletteSwitch from "./PaletteSwitch";
 
 function isActive(pathname: string, href: string) {
   if (href.includes("#")) return false;
@@ -61,12 +65,12 @@ export default function Nav() {
           </Link>
 
           <ul className="hidden items-center gap-0.5 md:flex">
-            {nav.map((l) => (
+            {links.map((l) => (
               <li key={l.href}>
                 <Link
                   href={l.href}
                   aria-current={isActive(pathname, l.href) ? "page" : undefined}
-                  className="relative px-3 py-2 text-[14px] font-medium text-[#2e3038] transition-colors duration-200 after:absolute after:inset-x-3 after:bottom-1 after:h-[1.5px] after:origin-left after:scale-x-0 after:rounded-full after:bg-current after:transition-transform after:duration-300 after:ease-[var(--ease-out)] hover:text-ink hover:after:scale-x-100 aria-[current=page]:text-[#0a6fe0] aria-[current=page]:after:scale-x-100"
+                  className="relative px-3 py-2 text-[14px] font-medium text-[#2e3038] transition-colors duration-200 after:absolute after:inset-x-3 after:bottom-1 after:h-[1.5px] after:origin-left after:scale-x-0 after:rounded-full after:bg-current after:transition-transform after:duration-300 after:ease-[var(--ease-out)] hover:text-ink hover:after:scale-x-100 aria-[current=page]:text-accent-strong aria-[current=page]:after:scale-x-100"
                 >
                   {l.label}
                 </Link>
@@ -77,12 +81,13 @@ export default function Nav() {
           <div className="flex items-center gap-1">
           <Link
             href="/contact"
-            className="wipe group mr-1 hidden h-9 items-center gap-2 rounded-lg bg-[#05070d] px-4 text-[14px] font-medium text-[#fff] transition-transform duration-150 ease-out active:scale-[0.97] md:flex"
+            className="wipe group mr-1 hidden h-9 items-center gap-2 rounded-lg bg-[#05070d] px-4 text-[14px] font-medium text-[#fff] transition-[transform,color] duration-150 ease-out hover:text-on-accent active:scale-[0.97] md:flex"
           >
             <span className="sweep bg-electric" />
             Let&apos;s talk
             <Arrow className="transition-transform duration-300 ease-[var(--ease-out)] group-hover:rotate-45" />
           </Link>
+          <PaletteSwitch className="hidden md:flex" />
           <ThemeToggle />
           <button
             type="button"
@@ -119,13 +124,13 @@ export default function Nav() {
             className="absolute inset-x-4 top-[72px] rounded-xl bg-white p-2 text-ink shadow-2xl md:hidden"
           >
             <ul>
-              {nav.map((l) => (
+              {links.map((l) => (
                 <li key={l.href}>
                   <Link
                     href={l.href}
                     onClick={() => setOpen(false)}
                     aria-current={isActive(pathname, l.href) ? "page" : undefined}
-                    className="block px-3 py-3 text-base font-medium underline-offset-[6px] decoration-[1.5px] hover:underline aria-[current=page]:text-[#0a6fe0] aria-[current=page]:underline"
+                    className="block px-3 py-3 text-base font-medium underline-offset-[6px] decoration-[1.5px] hover:underline aria-[current=page]:text-accent-strong aria-[current=page]:underline"
                   >
                     {l.label}
                   </Link>
@@ -139,6 +144,10 @@ export default function Nav() {
             >
               Let&apos;s talk <Arrow />
             </Link>
+            <div className="mt-3 flex items-center justify-between px-3">
+              <span className="text-[14px] text-[#2e3038]">Colour</span>
+              <PaletteSwitch />
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

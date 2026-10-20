@@ -1,9 +1,9 @@
 "use client";
 
 import { Canvas } from "@react-three/fiber";
-import AuroraStreak from "../AuroraStreak";
+import LightSwirl from "../LightSwirl";
 
-/** Client-only WebGL layer for the travelling aurora streak. */
+/** Client-only WebGL layer for the travelling light swirl (the previous aurora is in AuroraStreak.tsx). */
 export default function TravelerScene({ reduced }: { reduced: boolean }) {
   return (
     <Canvas
@@ -13,7 +13,7 @@ export default function TravelerScene({ reduced }: { reduced: boolean }) {
       eventPrefix="client"
       style={{ position: "absolute", inset: 0 }}
     >
-      <AuroraStreak reduced={reduced} />
+      <LightSwirl reduced={reduced} />
     </Canvas>
   );
 }

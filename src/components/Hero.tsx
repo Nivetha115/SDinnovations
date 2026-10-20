@@ -52,6 +52,7 @@ export default function Hero() {
   return (
     <section
       id="top"
+      data-flow-hero
       data-chapter="Overview"
       ref={root}
       className="theme-fixed relative isolate flex min-h-svh flex-col overflow-hidden bg-ink"
@@ -96,8 +97,8 @@ export default function Hero() {
         <div data-load className="mt-9 grid w-full grid-cols-2 gap-3 sm:w-[26rem]">
           <Link href="/services" className={`${heroBtn} bg-white text-ink`}>
             <span className="sweep bg-electric" />
-            <span className="transition-colors duration-200 group-hover:text-white">{hero.cta}</span>
-            <Arrow className="transition-[transform,color] duration-300 ease-out group-hover:rotate-45 group-hover:text-white" />
+            <span className="transition-colors duration-200 group-hover:text-on-accent">{hero.cta}</span>
+            <Arrow className="transition-[transform,color] duration-300 ease-out group-hover:rotate-45 group-hover:text-on-accent" />
           </Link>
           <Link
             href="/#about"

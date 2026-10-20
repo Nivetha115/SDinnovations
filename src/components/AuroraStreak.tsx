@@ -11,9 +11,9 @@ const vertex = /* glsl */ `
 `;
 
 /**
- * Soft aurora with one long diagonal light streak (the original SD Innovations hero look):
- * blurred teal / blue / violet glows on deep ink, and a fine streak with a wide halo.
- * Driven by `travel`: x/y move the composition, spin turns the streak, s spreads it, o fades it.
+ * Soft aurora (the original SD Innovations hero look): blurred teal / blue / violet glows on deep ink,
+ * and fine light streaks with a wide halo, shaped as a bundle that fans out from the left.
+ * Driven by `travel`: x/y move the composition, spin turns the streaks, s spreads them, o fades it.
  */
 const fragment = /* glsl */ `
   precision highp float;
@@ -55,7 +55,7 @@ const fragment = /* glsl */ `
     vec2 p = (vUv - 0.5) * vec2(aspect, 1.0) - uOffset * vec2(aspect, 1.0);
     float t = uTime * 0.04;
 
-    // liquid: the whole field flows slowly, like Cypher's background
+    // liquid: the whole field flows slowly
     vec2 flow = vec2(noise(p * 1.6 + vec2(0.0, uTime * 0.07)), noise(p * 1.6 + vec2(5.2, -uTime * 0.06)));
     p += flow * 0.06;
 
@@ -75,21 +75,32 @@ const fragment = /* glsl */ `
     col += blue   * 0.35 * glow(p, vec2(0.25, 0.42 + 0.03 * sin(t * 2.0)), vec2(0.55, 0.22) * uSpread);
     col += violet * 0.45 * glow(p, vec2(0.05 + 0.05 * sin(t * 1.7), -0.48), vec2(0.6, 0.22) * uSpread);
 
-    // the streak: a line through the centre, rising to the right
+    // The streak, in the original style (fine bright line, soft halo, travelling pulses),
+    // now shaped as a bundle of strands that leave the left together and fan out to the right.
     float a = uAngle;
     vec2 n = vec2(-sin(a), cos(a));
     vec2 dir = vec2(cos(a), sin(a));
     float along = dot(p, dir);
-    // the streak undulates gently and travels
+    float across = dot(p, n);
     float wave = 0.035 * sin(along * 2.6 + uTime * 0.45) + 0.015 * sin(along * 5.3 - uTime * 0.7);
-    float d = abs(dot(p, n) - wave);
     float span = smoothstep(1.25 * aspect * 0.6, 0.0, abs(along + 0.1)); // fade toward the ends
+    float fan = smoothstep(-0.45, 0.95, along);                          // 0 = together, 1 = spread
     float shimmer = 0.85 + 0.15 * sin(along * 6.0 - uTime * 0.6);
-    // pulses of light running along the streak
-    float pulse = pow(0.5 + 0.5 * sin(along * 2.2 - uTime * 0.9), 6.0) * 0.6;
-    shimmer += pulse;
-    float line = exp(-d * d * 2400.0) * 0.55 + exp(-d * d * 160.0) * 0.28 + exp(-d * 9.0) * 0.12;
-    col += mix(blue, core, 0.6) * line * span * shimmer;
+    float lines = 0.0;
+    for (int i = 0; i < 5; i++) {
+      float fi = float(i);
+      float k = (fi - 2.0) / 2.0;                                        // -1..1 across the bundle
+      float c = wave + k * fan * 0.34 * uSpread
+              + 0.02 * fan * sin(along * 3.1 + uTime * 0.5 + fi * 1.7);  // each strand sways a little
+      float d = abs(across - c);
+      float main = 1.0 - 0.45 * abs(k);                                  // outer strands are fainter
+      float pulse = pow(0.5 + 0.5 * sin(along * 2.2 - uTime * 0.9 + fi * 1.1), 6.0) * 0.6;
+      lines += (exp(-d * d * 2400.0) * 0.55 + exp(-d * d * 160.0) * 0.14) * main * (shimmer + pulse);
+    }
+    // one wide halo around the whole bundle, as before
+    float dc = abs(across - wave);
+    lines += exp(-dc * 9.0) * 0.12 * shimmer;
+    col += mix(blue, core, 0.6) * lines * span;
 
     col += teal * pull * 0.08;
 

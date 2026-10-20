@@ -10,12 +10,12 @@ type Fields = {
   email: string;
   phone: string;
   companyName: string;
-  service: string;
+  services: string[];
   description: string;
 };
 type Errors = Partial<Record<keyof Fields, string>>;
 
-const empty: Fields = { name: "", email: "", phone: "", companyName: "", service: "", description: "" };
+const empty: Fields = { name: "", email: "", phone: "", companyName: "", services: [], description: "" };
 
 function validate(f: Fields): Errors {
   const e: Errors = {};
@@ -23,7 +23,7 @@ function validate(f: Fields): Errors {
   if (!f.email.trim()) e.email = "We need an email to reply to.";
   else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(f.email.trim())) e.email = "That email doesn't look right — check for typos.";
   if (f.phone && !/^[+\d][\d\s()-]{6,}$/.test(f.phone.trim())) e.phone = "Use digits, spaces or + only.";
-  if (!f.service) e.service = "Pick the service closest to your project.";
+  if (f.services.length === 0) e.services = "Pick at least one service for your project.";
   if (f.description.trim().length < 20) e.description = "Add a little more detail (20 characters or more).";
   return e;
 }
@@ -39,7 +39,15 @@ export default function ContactForm() {
   const root = useRef<HTMLDivElement>(null);
   const { contextSafe } = useGSAP({ scope: root });
 
-  const set = (k: keyof Fields) => (v: string) => {
+  const toggleService = (s: string) => {
+    setFields((f) => ({
+      ...f,
+      services: f.services.includes(s) ? f.services.filter((x) => x !== s) : [...f.services, s],
+    }));
+    if (errors.services) setErrors((e) => ({ ...e, services: undefined }));
+  };
+
+  const set = (k: Exclude<keyof Fields, "services">) => (v: string) => {
     setFields((f) => ({ ...f, [k]: v }));
     if (errors[k]) setErrors((e) => ({ ...e, [k]: undefined }));
   };
@@ -55,12 +63,12 @@ export default function ContactForm() {
     setErrors(found);
     const first = Object.keys(found)[0] as keyof Fields | undefined;
     if (first) {
-      const el = e.currentTarget.elements.namedItem(first) as HTMLElement | null;
+      const el = e.currentTarget.querySelector<HTMLElement>(`[name="${first}"]`);
       el?.focus();
       shake(el?.closest("[data-field]") ?? null);
       return;
     }
-    const subject = `Project enquiry — ${fields.service}${fields.companyName ? ` · ${fields.companyName}` : ""}`;
+    const subject = `Project enquiry — ${fields.services.join(", ")}${fields.companyName ? ` · ${fields.companyName}` : ""}`;
     const body = [
       fields.description.trim(),
       "",
@@ -68,7 +76,7 @@ export default function ContactForm() {
       `Email: ${fields.email.trim()}`,
       fields.phone.trim() ? `Phone: ${fields.phone.trim()}` : null,
       fields.companyName.trim() ? `Company: ${fields.companyName.trim()}` : null,
-      `Service: ${fields.service}`,
+      `Services: ${fields.services.join(", ")}`,
     ]
       .filter((l) => l !== null)
       .join("\n");
@@ -114,28 +122,29 @@ export default function ContactForm() {
 
         <div data-field className="sm:col-span-2">
           <span id="service-label" className="mb-3 block text-[14px] text-white/70">
-            Select a service
+            Select services <span className="text-white/60">(choose any that apply)</span>
           </span>
-          <div role="radiogroup" aria-labelledby="service-label" aria-describedby={errors.service ? "service-error" : undefined} className="flex flex-wrap gap-2.5">
+          <div role="group" aria-labelledby="service-label" aria-describedby={errors.services ? "services-error" : undefined} className="flex flex-wrap gap-2.5">
             {contact.services.map((s) => (
               <label key={s} className="cursor-pointer">
                 <input
-                  type="radio"
-                  name="service"
+                  type="checkbox"
+                  name="services"
                   value={s}
-                  checked={fields.service === s}
-                  onChange={() => set("service")(s)}
+                  checked={fields.services.includes(s)}
+                  onChange={() => toggleService(s)}
                   className="peer sr-only"
                 />
-                <span className="inline-block rounded-full border border-white/20 px-5 py-2.5 text-[15px] text-white/80 transition-[background-color,border-color,color,transform] duration-200 ease-out hover:border-white/50 active:scale-[0.97] peer-checked:border-electric peer-checked:bg-electric peer-checked:text-[#fff] peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-electric">
+                <span className="inline-flex items-center gap-2 rounded-full border border-white/20 px-5 py-2.5 text-[15px] text-white/80 transition-[background-color,border-color,color,transform] duration-200 ease-out hover:border-white/50 active:scale-[0.97] peer-checked:border-electric peer-checked:bg-electric peer-checked:[&>svg]:block peer-checked:text-on-accent peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-electric">
+                  <svg aria-hidden viewBox="0 0 16 16" className="hidden h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 8.5l3.2 3.2L13 4.8" /></svg>
                   {s}
                 </span>
               </label>
             ))}
           </div>
-          {errors.service && (
-            <p id="service-error" className="mt-2 text-[14px] text-[var(--danger)]">
-              {errors.service}
+          {errors.services && (
+            <p id="services-error" className="mt-2 text-[14px] text-[var(--danger)]">
+              {errors.services}
             </p>
           )}
         </div>
@@ -167,8 +176,8 @@ export default function ContactForm() {
             className="wipe group inline-flex h-14 items-center gap-3 rounded-xl bg-white px-6 text-[16px] font-medium text-ink transition-transform duration-150 ease-out active:scale-[0.97]"
           >
             <span className="sweep bg-electric" />
-            <span className="transition-colors duration-200 group-hover:text-white">Send message</span>
-            <Arrow className="transition-colors duration-200 group-hover:text-[#fff] transition-transform duration-300 ease-out group-hover:rotate-45" />
+            <span className="transition-colors duration-200 group-hover:text-on-accent">Send message</span>
+            <Arrow className="transition-colors duration-200 group-hover:text-on-accent transition-transform duration-300 ease-out group-hover:rotate-45" />
           </button>
         </div>
       </form>
@@ -177,7 +186,7 @@ export default function ContactForm() {
 }
 
 const inputCls = (invalid: boolean) =>
-  `w-full rounded-xl border bg-white/[0.04] px-4 py-3.5 text-[16px] text-white caret-electric outline-none transition-[border-color,background-color] duration-200 placeholder:text-white/35 hover:border-white/40 focus:border-electric focus:bg-white/[0.07] ${
+  `w-full rounded-xl border bg-white/[0.04] px-4 py-3.5 text-[16px] text-white caret-electric outline-none transition-[border-color,background-color] duration-200 placeholder:text-white/60 hover:border-white/40 focus:border-electric focus:bg-white/[0.07] ${
     invalid ? "border-[var(--danger)]" : "border-white/20"
   }`;
 
@@ -206,7 +215,7 @@ function Field({
     <div data-field>
       <label htmlFor={name} className="mb-2 flex justify-between text-[14px] text-white/70">
         {label}
-        {optional && <span className="text-white/40">Optional</span>}
+        {optional && <span className="text-white/60">Optional</span>}
       </label>
       <input
         id={name}

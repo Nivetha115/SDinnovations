@@ -36,7 +36,7 @@ export default function CaseStudyView({ study, next }: { study: CaseStudy; next:
         <dl className="grid max-w-4xl grid-cols-2 gap-x-10 gap-y-5 md:grid-cols-4">
           {meta.map((m) => (
             <div key={m.k}>
-              <dt className="text-[13px] text-white/50">{m.k}</dt>
+              <dt className="text-[13px] text-white/60">{m.k}</dt>
               <dd className="mt-1 text-[15px] leading-snug text-white">{m.v}</dd>
             </div>
           ))}
@@ -125,7 +125,7 @@ export default function CaseStudyView({ study, next }: { study: CaseStudy; next:
           />
           <div className={`${wrap} relative flex items-end justify-between gap-6 py-16 md:py-24`}>
             <div>
-              <p className="text-[14px] text-white/55">Next case study</p>
+              <p className="text-[14px] text-white/60">Next case study</p>
               <p className="mt-3 text-[clamp(2rem,5vw,4.5rem)] font-medium leading-[1] tracking-[-0.035em]">
                 {next.title}
               </p>
@@ -181,10 +181,10 @@ function Approach({ study }: { study: CaseStudy }) {
           >
             {study.approach.map((a, i) => (
               <li key={a.title} className="relative">
-                <span className="relative z-10 grid h-6 w-6 place-items-center rounded-full bg-electric text-[12px] font-medium tabular-nums text-[#fff]">
+                <span className="relative z-10 grid h-6 w-6 place-items-center rounded-full bg-electric text-[12px] font-medium tabular-nums text-on-accent">
                   {i + 1}
                 </span>
-                <h3 className="mt-6 text-[22px] font-medium tracking-[-0.02em]">{a.title}</h3>
+                <SplitHeading as="h3" className="mt-6 text-[22px] font-medium tracking-[-0.02em]">{a.title}</SplitHeading>
                 <p className="mt-3 max-w-[34ch] text-[15px] leading-relaxed text-white/65">{a.body}</p>
               </li>
             ))}
