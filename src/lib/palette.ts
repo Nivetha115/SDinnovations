@@ -6,7 +6,7 @@
  */
 
 export type PaletteName = "blue" | "orange" | "emerald" | "mono";
-export const PALETTE_NAMES: PaletteName[] = ["blue", "orange", "emerald", "mono"];
+export const PALETTE_NAMES: PaletteName[] = ["mono", "blue", "orange", "emerald"]; // switcher order
 
 type RGB = [number, number, number];
 
