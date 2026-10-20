@@ -39,3 +39,11 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# local agent skills / tooling (reinstall from skills-lock.json)
+/.agent/
+/.agents/
+/.claude/
+/.gemini/
+/.next-build/
+/.taste-skill/

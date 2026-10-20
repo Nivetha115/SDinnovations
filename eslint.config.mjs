@@ -12,6 +12,11 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Installed agent skills (impeccable, emilkowalski/skill)
+    ".agent/**",
+    ".agents/**",
+    ".claude/**",
+    ".gemini/**",
   ]),
 ]);
 

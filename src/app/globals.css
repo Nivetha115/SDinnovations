@@ -1,26 +1,224 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --ink: #04060d;
+  --navy: #0e285d;
+  --royal: #0d409b;
+  --electric: #0099ff;
+  --paper: #f4f6fb;
+  --header-h: 88px;
+
+  /* theme tokens (dark is the default) */
+  --page: #04060d; /* the page colour itself — never overridden by .theme-fixed */
+  --body: #b9c6e4; /* body copy */
+  --card: #0a1226;
+  --card-hover: #0e285d;
+  --danger: #ff8a8a;
+  --row-hover: rgba(13, 64, 155, 0.45);
+  --banner: #0e285d;
+  --banner-glow: rgba(0, 153, 255, 0.55);
+  --banner-corner: rgba(4, 6, 13, 0.9);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* Light mode: the page inverts — "ink" becomes the light ground and "white" becomes the dark text. */
+[data-theme="light"] {
+  --ink: #ffffff;
+  --page: #ffffff;
+  --color-white: #0b1220;
+  --body: #4a5874;
+  --card: #eef2f9;
+  --card-hover: #dfe8fb;
+  --danger: #c62828;
+  --row-hover: rgba(10, 111, 224, 0.08);
+  --banner: #e8f0ff;
+  --banner-glow: rgba(0, 153, 255, 0.35);
+  --banner-corner: rgba(255, 255, 255, 0.85);
+  color-scheme: light;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* Areas that keep their designed look in both modes (hero skies, CTA banner, nav bar, light bands). */
+.theme-fixed {
+  --ink: #04060d;
+  --color-white: #fff;
+  --body: #b9c6e4;
+  --card: #0a1226;
+  --card-hover: #0e285d;
+  --danger: #ff8a8a;
+}
+
+/* Re-resolve inherited text colour inside fixed areas (base layer, so text-* utilities still win) */
+@layer base {
+  .theme-fixed {
+    color: var(--color-white);
   }
 }
 
+/* Brief cross-fade while switching themes */
+html.theme-switching,
+html.theme-switching * {
+  transition:
+    background-color 0.4s ease,
+    color 0.4s ease,
+    border-color 0.4s ease !important;
+}
+
+/* The white logo turns dark on the light page */
+[data-theme="light"] .theme-logo {
+  filter: brightness(0);
+}
+
+@theme inline {
+  --color-ink: var(--ink);
+  --color-navy: var(--navy);
+  --color-royal: var(--royal);
+  --color-electric: var(--electric);
+  --color-paper: var(--paper);
+  --font-sans: var(--font-instrument);
+  --font-mono: var(--font-mono);
+}
+
+html {
+  background: var(--page);
+  color: var(--color-white);
+  color-scheme: dark;
+  scroll-behavior: auto;
+  overflow-x: clip;
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  /* transparent: html carries the ink colour, so negative-z layers (hero shader) stay visible */
+  background: transparent;
+  color: var(--color-white);
+  font-family: var(--font-instrument), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--electric);
+  color: #fff;
+}
+
+/* Lenis */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: clip;
+}
+
+/* Film grain over WebGL areas */
+.grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.08;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+
+/* Wipe button (Cypher style) */
+.wipe {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+.wipe .sweep {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  transform: translateY(101%);
+  border-radius: inherit;
+  transition: transform 0.55s cubic-bezier(0.7, 0, 0.2, 1);
+}
+.wipe:hover .sweep,
+.wipe:focus-visible .sweep {
+  transform: translateY(0);
+}
+
+:root {
+  /* motion tokens (taste-skill motion.md) */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+/* Split headings wait for GSAP to split them; a CSS fallback shows them if the script never runs. */
+@media (prefers-reduced-motion: no-preference) {
+  .js [data-split] {
+    visibility: hidden;
+    animation: split-fallback 0s 2.5s forwards;
+  }
+}
+@keyframes split-fallback {
+  to {
+    visibility: visible;
+  }
+}
+.split-line {
+  padding-bottom: 0.08em;
+  margin-bottom: -0.08em;
+}
+
+:focus-visible {
+  outline: 2px solid var(--electric);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+/* Tech marquee: linear, pauses under the pointer, still for reduced motion */
+.marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee 38s linear infinite;
+}
+.marquee-wrap:hover .marquee {
+  animation-play-state: paused;
+}
+@media (prefers-reduced-motion: reduce) {
+  .marquee {
+    animation: none;
+    flex-wrap: wrap;
+    width: auto;
+  }
+}
+
+/* Line icons redraw on hover of their card (.group) */
+.draw-icon * {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+}
+.group:hover .draw-icon *,
+.group:focus-visible .draw-icon * {
+  animation: icon-draw 0.9s var(--ease-out) both;
+}
+.group:hover .draw-icon *:nth-child(2) { animation-delay: 0.08s; }
+.group:hover .draw-icon *:nth-child(3) { animation-delay: 0.16s; }
+.group:hover .draw-icon *:nth-child(4) { animation-delay: 0.24s; }
+@keyframes icon-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }
