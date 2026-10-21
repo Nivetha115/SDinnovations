@@ -8,8 +8,8 @@ import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "motion/react";
 import { nav } from "@/lib/content";
 
-// The "Start a project" button already goes to /contact, so the header skips Contact; About stays in the footer only.
-const links = nav.filter((l) => l.href !== "/contact" && l.href !== "/#about");
+// The "Start a project" button already goes to /contact, so the header skips the Contact link.
+const links = nav.filter((l) => l.href !== "/contact");
 import ThemeToggle from "./ThemeToggle";
 import PaletteSwitch from "./PaletteSwitch";
 
