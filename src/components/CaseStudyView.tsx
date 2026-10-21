@@ -27,9 +27,8 @@ export default function CaseStudyView({ study, next }: { study: CaseStudy; next:
         title={study.title}
         body={study.summary}
         kicker={
-          <Link href="/case-studies" className="group inline-flex items-center gap-2 transition-colors duration-200 hover:text-white">
-            <Arrow className="-scale-x-100 transition-transform duration-300 ease-[var(--ease-out)] group-hover:-translate-x-1" />
-            Case studies · <span className="text-electric">{study.tag}</span>
+          <Link href="/case-studies" className="inline-flex items-center gap-2 transition-colors duration-200 hover:text-white">
+            Case studies · {study.tag}
           </Link>
         }
       >
@@ -44,7 +43,7 @@ export default function CaseStudyView({ study, next }: { study: CaseStudy; next:
       </PageHero>
 
       {/* Figures */}
-      <section className="theme-fixed bg-paper py-20 text-ink md:py-28">
+      <section className="theme-fixed bg-white py-20 text-ink md:py-28">
         <div className={wrap}>
           <SectionLabel tone="light">Impact</SectionLabel>
           <Reveal

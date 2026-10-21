@@ -9,7 +9,7 @@ function subscribe(cb: () => void) {
   mo.observe(document.documentElement, { attributes: true, attributeFilter: ["data-palette"] });
   return () => mo.disconnect();
 }
-const getServerSnapshot = (): PaletteName => "blue";
+const getServerSnapshot = (): PaletteName => "mono";
 
 /** Swatches that switch the colour palette, in light and dark mode. */
 export default function PaletteSwitch({ className = "" }: { className?: string }) {

@@ -6,7 +6,7 @@
  */
 
 export type PaletteName = "blue" | "orange" | "emerald" | "mono";
-export const PALETTE_NAMES: PaletteName[] = ["mono", "blue", "orange", "emerald"]; // switcher order
+export const PALETTE_NAMES: PaletteName[] = ["mono", "emerald", "blue", "orange"]; // switcher order
 
 type RGB = [number, number, number];
 
@@ -88,9 +88,9 @@ const isName = (v: unknown): v is PaletteName => PALETTE_NAMES.includes(v as Pal
 
 /** The palette the visitor picked (whatever the theme). */
 export function getChosenPalette(): PaletteName {
-  if (typeof document === "undefined") return "blue";
+  if (typeof document === "undefined") return "mono";
   const v = document.documentElement.dataset.palette;
-  return isName(v) ? v : "blue";
+  return isName(v) ? v : "mono";
 }
 
 /** The palette on screen. */

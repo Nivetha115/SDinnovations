@@ -8,7 +8,7 @@ import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "motion/react";
 import { nav } from "@/lib/content";
 
-// The "Let's talk" button already goes to /contact, so the header skips the Contact link.
+// The "Start a project" button already goes to /contact, so the header skips the Contact link.
 const links = nav.filter((l) => l.href !== "/contact");
 import ThemeToggle from "./ThemeToggle";
 import PaletteSwitch from "./PaletteSwitch";
@@ -85,7 +85,7 @@ export default function Nav() {
             className="wipe group mr-1 hidden h-9 items-center gap-2 rounded-lg bg-[#05070d] px-4 text-[14px] font-medium text-[#fff] transition-[transform,color] duration-150 ease-out hover:text-on-accent active:scale-[0.97] md:flex"
           >
             <span className="sweep bg-electric" />
-            Let&apos;s talk
+            Start a project
             <Arrow className="transition-transform duration-300 ease-[var(--ease-out)] group-hover:rotate-45" />
           </Link>
           <PaletteSwitch className="hidden md:flex" />
@@ -143,7 +143,7 @@ export default function Nav() {
               onClick={() => setOpen(false)}
               className="mt-1 flex items-center justify-center gap-2 rounded-lg bg-[#05070d] px-4 py-3 font-medium text-[#fff] active:scale-[0.98]"
             >
-              Let&apos;s talk <Arrow />
+              Start a project <Arrow />
             </Link>
             <div className="mt-3 flex items-center justify-between px-3">
               <span className="text-[14px] text-[#2e3038]">Colour</span>

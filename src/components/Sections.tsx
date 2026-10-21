@@ -62,7 +62,7 @@ export function Services() {
 
 export function WhyUs() {
   return (
-    <section id="why" className="theme-fixed relative bg-paper py-24 text-ink md:py-36">
+    <section id="why" className="theme-fixed relative bg-white py-24 text-ink md:py-36">
       <div className={wrap}>
         <SectionLabel tone="light">{why.label}</SectionLabel>
         <SplitHeading className="mt-10 max-w-[22ch] text-[clamp(2rem,4.4vw,4.25rem)] font-medium leading-[1.02] tracking-[-0.03em] md:mt-14">
@@ -76,7 +76,7 @@ export function WhyUs() {
           {why.items.map((it) => (
             <div
               key={it.title}
-              className="group relative flex h-full min-h-[300px] flex-col bg-paper p-7 transition-colors duration-500 ease-[var(--ease-out)] hover:bg-navy hover:text-white md:p-8"
+              className="group relative flex h-full min-h-[300px] flex-col bg-white p-7 transition-colors duration-500 ease-[var(--ease-out)] hover:bg-navy hover:text-white md:p-8"
             >
               <span className="grid h-14 w-14 place-items-center rounded-xl bg-ink/[0.05] text-royal transition-[background-color,color] duration-500 ease-[var(--ease-out)] group-hover:bg-electric group-hover:text-on-accent">
                 <WhyIcon name={it.icon} className="h-7 w-7" />
@@ -112,7 +112,7 @@ export function CaseRows({ limit }: { limit?: number }) {
             />
             <div className="relative">
               <p className="text-[14px] text-electric">{c.tag}</p>
-              <SplitHeading as="h3" className="mt-2 text-[clamp(1.6rem,3vw,2.6rem)] font-medium leading-[1.05] tracking-[-0.025em] transition-transform duration-500 ease-[var(--ease-out)] group-hover:translate-x-2">
+              <SplitHeading as="h3" className="mt-2 text-[clamp(1.6rem,3vw,2.6rem)] font-medium leading-[1.05] tracking-[-0.025em]">
                 {c.title}
               </SplitHeading>
             </div>

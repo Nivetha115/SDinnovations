@@ -360,3 +360,8 @@ html.lenis body {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* Light mode, Mono: the accent is near-black, which vanishes on chips inside dark fixed areas (heroes), so those dots stay white. */
+html[data-theme="light"][data-palette="mono"] .theme-fixed .pill-dot-dark {
+  background-color: #fff;
+}

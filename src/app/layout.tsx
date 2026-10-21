@@ -37,7 +37,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <script
           dangerouslySetInnerHTML={{
             __html:
-              "(function(){var d=document.documentElement;d.classList.add('js');try{var t=localStorage.getItem('theme');if(t!=='light'&&t!=='dark'){t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'}d.dataset.theme=t}catch(e){d.dataset.theme='dark'}try{var p=localStorage.getItem('palette');d.dataset.palette=(p==='orange'||p==='emerald'||p==='mono')?p:'blue'}catch(e){d.dataset.palette='blue'}})()",
+              "(function(){var d=document.documentElement;d.classList.add('js');try{var t=localStorage.getItem('theme');if(t!=='light'&&t!=='dark'){t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'}d.dataset.theme=t}catch(e){d.dataset.theme='dark'}try{var p=localStorage.getItem('palette');d.dataset.palette=(p==='orange'||p==='emerald'||p==='blue')?p:'mono'}catch(e){d.dataset.palette='mono'}})()",
           }}
         />
       </head>

@@ -29,12 +29,18 @@ export function ServiceList() {
         );
         // Each service lights its marker as it reaches the reading line.
         gsap.utils.toArray<HTMLElement>("[data-service]").forEach((el) => {
-          gsap.to(el.querySelector("[data-dot]"), {
-            backgroundColor: () => getComputedStyle(document.documentElement).getPropertyValue("--electric").trim() || "#0099ff",
+          // Colour comes from a class (so it follows the live palette); GSAP only scales.
+          const dot = el.querySelector("[data-dot]");
+          gsap.to(dot, {
             scale: 1.6,
             duration: 0.3,
             ease: "power2.out",
-            scrollTrigger: { trigger: el, start: "top 70%", toggleActions: "play none none reverse" },
+            scrollTrigger: {
+              trigger: el,
+              start: "top 70%",
+              toggleActions: "play none none reverse",
+              toggleClass: { targets: dot, className: "is-lit" },
+            },
           });
         });
       });
@@ -72,7 +78,7 @@ export function ServiceList() {
                   <span
                     data-dot
                     aria-hidden
-                    className="absolute -left-14 top-[0.55em] hidden h-[15px] w-[15px] rounded-full border-[3px] border-ink bg-white/30 text-[clamp(1.75rem,3.4vw,3rem)] md:block"
+                    className="absolute -left-14 top-[0.55em] hidden h-[15px] w-[15px] rounded-full border-[3px] border-ink bg-white/30 text-[clamp(1.75rem,3.4vw,3rem)] transition-colors duration-300 md:block [&.is-lit]:bg-electric"
                   />
                   <SplitHeading as="h3" className="text-[clamp(1.75rem,3.4vw,3rem)] font-medium leading-[1.05] tracking-[-0.025em]">
                     {s.title}
@@ -101,7 +107,7 @@ export function ServiceList() {
 export function TechStack() {
   const row = [...techStack, ...techStack];
   return (
-    <section className="theme-fixed relative overflow-hidden bg-paper py-24 text-ink md:py-32">
+    <section className="theme-fixed relative overflow-hidden bg-white py-24 text-ink md:py-32">
       <div className={wrap}>
         <SectionLabel tone="light">Our technology stack</SectionLabel>
         <SplitHeading className="mt-10 max-w-[22ch] text-[clamp(2rem,4.2vw,4rem)] font-medium leading-[1.02] tracking-[-0.03em] md:mt-14">
@@ -114,7 +120,7 @@ export function TechStack() {
             <li
               key={i}
               aria-hidden={i >= techStack.length}
-              className="mx-3 whitespace-nowrap rounded-full bg-white px-8 py-5 text-[clamp(1.5rem,3vw,2.75rem)] font-medium tracking-[-0.02em] text-ink transition-colors duration-200 hover:bg-navy hover:text-white md:mx-4"
+              className="mx-3 whitespace-nowrap rounded-full border border-ink/12 bg-white px-8 py-5 text-[clamp(1.5rem,3vw,2.75rem)] font-medium tracking-[-0.02em] text-ink transition-colors duration-200 hover:border-navy hover:bg-navy hover:text-white md:mx-4"
             >
               {t}
             </li>
