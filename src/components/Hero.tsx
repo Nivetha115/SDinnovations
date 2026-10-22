@@ -101,11 +101,11 @@ export default function Hero() {
             <Arrow className="transition-[transform,color] duration-300 ease-out group-hover:rotate-45 group-hover:text-on-accent" />
           </Link>
           <Link
-            href="/#about"
+            href="/contact"
             className={`${heroBtn} border border-white/25 bg-white/[0.06] text-white backdrop-blur-md`}
           >
             <span className="sweep bg-white" />
-            <span className="transition-colors duration-200 group-hover:text-ink">About us</span>
+            <span className="transition-colors duration-200 group-hover:text-ink">Contact us</span>
             <Arrow className="transition-[transform,color] duration-300 ease-out group-hover:rotate-45 group-hover:text-ink" />
           </Link>
         </div>
