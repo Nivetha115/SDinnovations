@@ -23,7 +23,7 @@ export const hero = {
   eyebrow: "Innovative solutions for modern challenges",
   title: "Transforming Ideas into Impactful Solutions",
   body: "We combine innovative thinking with cutting-edge technology to help businesses solve complex problems.",
-  cta: "Explore",
+  cta: "Get started",
 };
 
 export type Service = {
