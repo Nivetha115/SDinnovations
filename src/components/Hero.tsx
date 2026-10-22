@@ -63,10 +63,10 @@ export default function Hero() {
       </div>
 
 
-      {/* Aitch-style: everything anchored to the bottom-left */}
+      {/* Mobile: vertically centred below the header. md+: anchored to the bottom-left. */}
       <div
         data-copy
-        className="relative z-[2] mx-auto mt-auto flex w-full max-w-[1440px] flex-col items-start px-5 pb-12 pt-[calc(var(--header-h)+4rem)] md:px-10 md:pb-16"
+        className="relative z-[2] mx-auto my-auto flex w-full max-w-[1440px] flex-col items-start px-5 pb-8 pt-[calc(var(--header-h)+1.5rem)] md:mb-0 md:mt-auto md:px-10 md:pb-16 md:pt-[calc(var(--header-h)+4rem)]"
       >
         <p data-load className="mb-6">
           <Pill live>{hero.eyebrow}</Pill>
